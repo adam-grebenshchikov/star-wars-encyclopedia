@@ -16,13 +16,11 @@ export default {
 </script>
 
 <style>
-body {
-  background-color: #333;
-}
-
 #app {
   font-family: Roboto;
   font-weight: 400;
   color: #fff;
+  background-color: #333;
+  min-height: 100vh;
 }
 </style>
