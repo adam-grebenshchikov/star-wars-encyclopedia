@@ -1,13 +1,7 @@
 <template>
-  <div id="app">
+  <div class="app">
     <Header />
-    <div class="search-field-wrapper">
-      <SearchField
-        placeholder="Search by Name"
-        width="800px"
-        @input="toSaveSearchValue"
-      />
-    </div>
+    <SearchField placeholder="Search by Name" @input="toSaveSearchValue" />
   </div>
 </template>
 
@@ -34,7 +28,7 @@ export default {
 </script>
 
 <style>
-#app {
+.app {
   font-family: Roboto;
   font-weight: 400;
   color: #fff;
@@ -42,10 +36,13 @@ export default {
   min-height: 100vh;
 }
 
-.search-field-wrapper {
-  display: flex;
+.search-field-container {
+  padding: 80px 32px;
+  margin: auto;
   justify-content: center;
-  padding: 80px 0;
-  margin: 0 32px;
+}
+
+.search-field {
+  flex-basis: 800px;
 }
 </style>

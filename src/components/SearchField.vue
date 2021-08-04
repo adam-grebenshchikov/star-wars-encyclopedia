@@ -1,5 +1,5 @@
 <template>
-  <div class="search-field-container" :style="cssProps">
+  <div class="search-field-container">
     <input
       class="search-field"
       type="text"
@@ -17,28 +17,19 @@ export default {
   name: "SearchField",
   props: {
     placeholder: String,
-    width: {
-      type: String,
-      required: true,
-    },
   },
   methods: {
     sendValueToParent: function (e) {
       this.$emit("input", e.target.value);
     },
   },
-  computed: {
-    cssProps: function () {
-      return {
-        "flex-basis": this.width,
-      };
-    },
-  },
 };
 </script>
 
-
 <style>
+.search-field-container {
+  display: flex;
+}
 .search-field {
   color: #808080;
   font-weight: 500;
@@ -51,11 +42,6 @@ export default {
   padding-bottom: 7.5px;
   width: 100%;
 }
-
-.search-field-container {
-  display: flex;
-}
-
 .search-field-icon {
   background: transparent;
   border: none;
