@@ -1,7 +1,11 @@
 <template>
   <div class="app">
     <Header />
-    <SearchField placeholder="Search by Name" @input="toSaveSearchValue" />
+    <SearchField
+      class="search-field-custom-styles"
+      placeholder="Search by Name"
+      @input="toSaveSearchValue"
+    />
   </div>
 </template>
 
@@ -35,14 +39,13 @@ export default {
   background-color: #333;
   min-height: 100vh;
 }
+</style>
 
-.search-field-container {
+<style scoped>
+.search-field-custom-styles {
   padding: 80px 32px;
   margin: auto;
   justify-content: center;
-}
-
-.search-field {
-  flex-basis: 800px;
+  max-width: 800px;
 }
 </style>
