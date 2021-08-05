@@ -41,6 +41,7 @@ export default {
   border-bottom: 1px solid #808080;
   padding-bottom: 7.5px;
   width: 100%;
+  outline: none;
 }
 .search-field-icon {
   background: transparent;
