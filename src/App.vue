@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <Header />
+    <Header text="CHARACTER Encyclopedia" />
     <SearchField
       class="search-field-custom-styles"
       placeholder="Search by Name"
@@ -19,6 +19,7 @@
 <script>
 import "reset-css/reset.css";
 import "roboto-fontface/css/roboto/roboto-fontface.css";
+
 import Header from "./components/Header.vue";
 import SearchField from "./components/SearchField.vue";
 import CardList from "./components/CardList.vue";

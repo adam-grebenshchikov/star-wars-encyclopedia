@@ -1,7 +1,7 @@
 <template>
   <header class="header">
     <img class="header__logo" src="../assets/header-star.svg" alt="STAR" />
-    <h1 class="header__title">CHARACTER Encyclopedia</h1>
+    <h1 class="header__title">{{ text }}</h1>
     <img class="header__logo" src="../assets/header-wars.svg" alt="WARS" />
   </header>
 </template>
@@ -9,6 +9,11 @@
 <script>
 export default {
   name: "Header",
+  props: {
+    text: {
+      type: String,
+    },
+  },
 };
 </script>
 
