@@ -29,12 +29,18 @@ export default {
   },
   async mounted() {
     const response = await fetch("https://swapi.dev/api/people?page=1");
-    const result = await response.json();
-    //Добавил таймер, чтобы показать работу прелоадера
-    setTimeout(() => {
-      this.people = result.results;
-      this.isLoading = false;
-    }, 1000);
+    const people = (await response.json()).results;
+
+    for await (const person of people) {
+      for (let [i, speciesItem] of person.species.entries()) {
+        const response = await fetch(speciesItem);
+        const species = await response.json();
+        person.species[i] = species.name;
+      }
+    }
+
+    this.people = people;
+    this.isLoading = false;
   },
   methods: {
     toSaveSearchValue: function (value) {
