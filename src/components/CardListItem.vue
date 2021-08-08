@@ -1,11 +1,12 @@
 <template>
-  <div class="card-list__item card">
+  <div class="card card-list__item">
     <div class="card__content">
       <Avatar
-        :letter="getFirstLetterOfName()"
-        :background="getPersonEyeColor()"
+        :letter="getPersonFirstLetterOfName"
+        :background="getPersonEyeColor"
       />
-      <h2 class="card__title">{{ person.name }}</h2>
+      <h2 class="card__title">{{ getPersonName }}</h2>
+      <h2 class="card__description">{{ getPersonSpecies }}</h2>
     </div>
   </div>
 </template>
@@ -20,15 +21,20 @@ export default {
       type: Object,
     },
   },
-  methods: {
-    getFirstLetterOfName: function () {
+  computed: {
+    getPersonFirstLetterOfName: function () {
       return this.person.name.charAt(0);
     },
     getPersonEyeColor: function () {
       return this.person.eye_color;
     },
     getPersonSpecies: function () {
-      return this.person.species.name;
+      return this.person.species[0] === undefined
+        ? "n/a"
+        : this.person.species[0];
+    },
+    getPersonName: function () {
+      return this.person.name;
     },
   },
   components: {
@@ -64,5 +70,11 @@ export default {
   display: flex;
   align-items: center;
   flex-direction: column;
+}
+.card__description {
+  color: #808080;
+  font-size: 13px;
+  line-height: 15px;
+  margin-top: 9px;
 }
 </style>
