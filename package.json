@@ -11,7 +11,8 @@
     "core-js": "^3.6.5",
     "reset-css": "^5.0.1",
     "roboto-fontface": "^0.10.0",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "vue-spinner": "^1.0.4"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

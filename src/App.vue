@@ -7,6 +7,12 @@
       @input="toSaveSearchValue"
     />
     <CardList class="card-list-custom-styles" :data="people" />
+    <PulseLoader
+      size="40px"
+      color="#FFFF00"
+      :loading="isLoading"
+      class="pulse-loader-custom-styles"
+    />
   </div>
 </template>
 
@@ -16,10 +22,11 @@ import "roboto-fontface/css/roboto/roboto-fontface.css";
 import Header from "./components/Header.vue";
 import SearchField from "./components/SearchField.vue";
 import CardList from "./components/CardList.vue";
+import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 
 export default {
   name: "App",
-  components: { Header, SearchField, CardList },
+  components: { Header, SearchField, CardList, PulseLoader },
   data() {
     return {
       searchValue: "",
@@ -54,7 +61,6 @@ export default {
 * {
   box-sizing: border-box;
 }
-
 .app {
   font-family: Roboto;
   font-weight: 400;
@@ -71,8 +77,10 @@ export default {
   justify-content: center;
   max-width: 800px;
 }
-
 .card-list-custom-styles {
   max-width: 1280px;
+}
+.pulse-loader-custom-styles {
+  text-align: center;
 }
 </style>
