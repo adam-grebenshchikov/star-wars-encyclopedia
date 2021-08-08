@@ -13,6 +13,7 @@
       :loading="isLoading"
       class="pulse-loader-custom-styles"
     />
+    <Footer text="STAR WARS CHARACTER Encyclopedia, 2019" />
   </div>
 </template>
 
@@ -23,11 +24,12 @@ import "roboto-fontface/css/roboto/roboto-fontface.css";
 import Header from "./components/Header.vue";
 import SearchField from "./components/SearchField.vue";
 import CardList from "./components/CardList.vue";
+import Footer from "./components/Footer.vue";
 import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 
 export default {
   name: "App",
-  components: { Header, SearchField, CardList, PulseLoader },
+  components: { Header, SearchField, CardList, Footer, PulseLoader },
   data() {
     return {
       searchValue: "",
