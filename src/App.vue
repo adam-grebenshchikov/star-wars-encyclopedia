@@ -4,9 +4,13 @@
     <SearchField
       class="search-field-custom-styles"
       placeholder="Search by Name"
-      @input="toSaveSearchValue"
+      @input="saveSearchValue"
     />
-    <CardList class="card-list-custom-styles" :data="people" />
+    <CardList
+      class="card-list-custom-styles"
+      :data="people"
+      :showModal="showModal"
+    />
     <PulseLoader
       size="40px"
       color="#FFFF00"
@@ -14,6 +18,12 @@
       class="pulse-loader-custom-styles"
     />
     <Footer text="STAR WARS CHARACTER Encyclopedia, 2019" />
+    <Modal
+      v-if="isModalVisible"
+      :closeModal="closeModal"
+      :person="getPerson"
+      :isLoading="isModalLoading"
+    />
   </div>
 </template>
 
@@ -25,36 +35,73 @@ import Header from "./components/Header.vue";
 import SearchField from "./components/SearchField.vue";
 import CardList from "./components/CardList.vue";
 import Footer from "./components/Footer.vue";
+import Modal from "./components/Modal.vue";
 import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 
 export default {
   name: "App",
-  components: { Header, SearchField, CardList, Footer, PulseLoader },
+  components: { Header, SearchField, CardList, Footer, Modal, PulseLoader },
   data() {
     return {
       searchValue: "",
       people: [],
       isLoading: true,
+      isModalLoading: false,
+      isModalVisible: false,
+      selectedPersonUrl: null,
     };
   },
   async mounted() {
-    const response = await fetch("https://swapi.dev/api/people?page=1");
-    const people = (await response.json()).results;
-
-    for await (const person of people) {
-      for (let [i, speciesItem] of person.species.entries()) {
-        const response = await fetch(speciesItem);
-        const species = await response.json();
-        person.species[i] = species.name;
-      }
-    }
-
-    this.people = people;
+    this.people = await this.fetchPeople();
+    await this.mapPeopleTo("species");
     this.isLoading = false;
   },
+  computed: {
+    getPerson: function () {
+      let selectedPerson = this.people.find(
+        (person) => person.url == this.selectedPersonUrl
+      );
+      return selectedPerson;
+    },
+  },
   methods: {
-    toSaveSearchValue: function (value) {
+    mapPeopleTo: async function (key) {
+      for await (const person of this.people) {
+        for (let objectUrl of person[`${key}`]) {
+          const response = await fetch(objectUrl);
+          const object = await response.json();
+          person[`${key}`] = object;
+        }
+      }
+    },
+    mapPersonTo: async function (person, key) {
+      const objectArray = [];
+      for await (let objectUrl of person[`${key}`]) {
+        const response = await fetch(objectUrl);
+        const object = await response.json();
+        objectArray.push(object);
+      }
+      person[`${key}`] = objectArray;
+    },
+    fetchPeople: async function (page = 1) {
+      const response = await fetch(`https://swapi.dev/api/people?page=${page}`);
+      return (await response.json()).results;
+    },
+    saveSearchValue: function (value) {
       this.searchValue = value;
+    },
+    showModal: async function (personUrl) {
+      this.isModalLoading = this.isModalVisible = true;
+      this.selectedPersonUrl = personUrl;
+
+      const selectedPerson = this.getPerson;
+      if (typeof selectedPerson.films[0] === "string")
+        await this.mapPersonTo(selectedPerson, "films");
+      this.isModalLoading = false;
+    },
+    closeModal: function () {
+      this.isModalVisible = this.isModalLoading = false;
+      this.selectedPersonUrl = null;
     },
   },
 };

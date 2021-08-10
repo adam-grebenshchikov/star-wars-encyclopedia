@@ -1,6 +1,11 @@
 <template>
   <div class="card-list">
-    <CardListItem v-for="person in data" :key="person.url" :person="person" />
+    <CardListItem
+      v-for="person in data"
+      :key="person.url"
+      :person="person"
+      @click.native="showModal(person.url)"
+    />
   </div>
 </template>
 
@@ -13,6 +18,7 @@ export default {
   },
   props: {
     data: Array,
+    showModal: Function,
   },
 };
 </script>
