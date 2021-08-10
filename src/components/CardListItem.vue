@@ -29,9 +29,9 @@ export default {
       return this.person.eye_color;
     },
     getPersonSpecies: function () {
-      return this.person.species[0] === undefined
+      return Array.isArray(this.person.species)
         ? "n/a"
-        : this.person.species[0];
+        : this.person.species.name;
     },
     getPersonName: function () {
       return this.person.name;
