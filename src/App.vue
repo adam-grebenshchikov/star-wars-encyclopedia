@@ -78,7 +78,10 @@ export default {
     mapPeopleTo: async function (key) {
       for await (const person of this.people) {
         for (let objectUrl of person[`${key}`]) {
-          const response = await fetch(objectUrl);
+          const response = await fetch(objectUrl, {
+            mode: "cors",
+            signal,
+          });
           const object = await response.json();
           person[`${key}`] = object;
         }
@@ -87,14 +90,22 @@ export default {
     mapPersonTo: async function (person, key) {
       const objectArray = [];
       for await (let objectUrl of person[`${key}`]) {
-        const response = await fetch(objectUrl);
+        const response = await fetch(objectUrl, {
+          mode: "cors",
+        });
         const object = await response.json();
         objectArray.push(object);
       }
       person[`${key}`] = objectArray;
     },
     fetchPeople: async function (page = 1) {
-      const response = await fetch(`https://swapi.dev/api/people?page=${page}`);
+      const response = await fetch(
+        `https://swapi.dev/api/people?page=${page}`,
+        {
+          mode: "cors",
+          signal,
+        }
+      );
       return (await response.json()).results;
     },
     saveSearchValue: function (value) {
