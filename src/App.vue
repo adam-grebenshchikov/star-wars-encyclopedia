@@ -5,6 +5,7 @@
       class="search-field-custom-styles"
       placeholder="Search by Name"
       @input="saveSearchValue"
+      @click.native="scrollToElement"
     />
     <CardList
       class="card-list-custom-styles"
@@ -65,6 +66,15 @@ export default {
     },
   },
   methods: {
+    scrollToElement: function () {
+      const el = this.$el.getElementsByClassName(
+        "search-field-custom-styles"
+      )[0];
+
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    },
     mapPeopleTo: async function (key) {
       for await (const person of this.people) {
         for (let objectUrl of person[`${key}`]) {
@@ -89,6 +99,7 @@ export default {
     },
     saveSearchValue: function (value) {
       this.searchValue = value;
+      this.scrollToElement();
     },
     showModal: async function (personUrl) {
       this.isModalLoading = this.isModalVisible = true;
