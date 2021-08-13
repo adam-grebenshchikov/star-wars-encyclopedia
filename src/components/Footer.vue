@@ -18,7 +18,7 @@ export default {
 <style>
 .footer {
   background: #1a1a1a;
-  padding: 50px 0;
+  padding: 50px 15px;
   margin-top: 160px;
 }
 .footer__title {

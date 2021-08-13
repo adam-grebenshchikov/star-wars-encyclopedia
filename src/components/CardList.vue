@@ -28,6 +28,5 @@ export default {
   display: flex;
   margin: auto;
   flex-wrap: wrap;
-  padding: 0 16px;
 }
 </style>
