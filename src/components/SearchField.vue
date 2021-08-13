@@ -1,14 +1,16 @@
 <template>
   <div class="search-field-container">
-    <input
-      class="search-field"
-      type="text"
-      :placeholder="placeholder"
-      @input="sendValueToParent"
-    />
-    <button class="search-field-icon">
-      <img src="../assets/search-field-magnifier.svg" />
-    </button>
+    <div class="search-bar" :style="cssProps">
+      <input
+        class="search-field"
+        type="text"
+        :placeholder="placeholder"
+        @input="sendValueToParent"
+      />
+      <button class="search-field-icon">
+        <img src="../assets/search-field-magnifier.svg" />
+      </button>
+    </div>
   </div>
 </template>
 
@@ -17,6 +19,17 @@ export default {
   name: "SearchField",
   props: {
     placeholder: String,
+    width: {
+      type: String,
+      default: "800px",
+    },
+  },
+  computed: {
+    cssProps: function () {
+      return {
+        "flex-basis": this.width,
+      };
+    },
   },
   methods: {
     sendValueToParent: function (e) {
@@ -37,7 +50,8 @@ export default {
   line-height: 21px;
   font-family: inherit;
   background-color: transparent;
-  border: 0px;
+  border: 0;
+  border-radius: 0;
   border-bottom: 1px solid #808080;
   padding-bottom: 7.5px;
   width: 100%;
@@ -49,5 +63,8 @@ export default {
   outline: none;
   margin-left: -29px;
   padding-right: 0;
+}
+.search-bar {
+  display: flex;
 }
 </style>
