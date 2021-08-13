@@ -7,17 +7,20 @@
       @input="saveSearchValue"
       @click.native="scrollToElement"
     />
-    <CardList
-      class="card-list-custom-styles"
-      :data="people"
-      :showModal="showModal"
-    />
-    <PulseLoader
-      size="40px"
-      color="#FFFF00"
-      :loading="isLoading"
-      class="pulse-loader-custom-styles"
-    />
+    <div class="loading-block">
+      <CardList
+        class="card-list-custom-styles"
+        :data="people"
+        :showModal="showModal"
+        v-show="!isLoading"
+      />
+      <PulseLoader
+        size="40px"
+        color="#FFFF00"
+        :loading="isLoading"
+        class="pulse-loader-custom-styles"
+      />
+    </div>
     <Footer text="STAR WARS CHARACTER Encyclopedia, 2019" />
     <Modal
       v-if="isModalVisible"
@@ -32,12 +35,15 @@
 import "reset-css/reset.css";
 import "roboto-fontface/css/roboto/roboto-fontface.css";
 
-import Header from "./components/Header.vue";
+import PulseLoader from "vue-spinner/src/PulseLoader.vue";
 import SearchField from "./components/SearchField.vue";
 import CardList from "./components/CardList.vue";
+import Header from "./components/Header.vue";
 import Footer from "./components/Footer.vue";
 import Modal from "./components/Modal.vue";
-import PulseLoader from "vue-spinner/src/PulseLoader.vue";
+
+let controller = new AbortController();
+let { signal } = controller;
 
 export default {
   name: "App",
@@ -56,6 +62,28 @@ export default {
     this.people = await this.fetchPeople();
     await this.mapPeopleTo("species");
     this.isLoading = false;
+  },
+  watch: {
+    searchValue: async function () {
+      controller.abort();
+      controller = new AbortController();
+      signal = controller.signal;
+      this.isLoading = true;
+
+      try {
+        const response = await fetch(
+          `https://swapi.dev/api/people/?search=${this.searchValue}`,
+          {
+            mode: "cors",
+            signal,
+          }
+        );
+        this.people = (await response.json()).results;
+        this.isLoading = false;
+      } catch {
+        console.log();
+      }
+    },
   },
   computed: {
     getPerson: function () {
