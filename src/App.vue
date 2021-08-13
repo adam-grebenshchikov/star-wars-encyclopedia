@@ -133,15 +133,25 @@ export default {
 
 <style scoped>
 .search-field-custom-styles {
-  padding: 80px 32px;
-  margin: auto;
+  position: sticky;
+  top: 0;
+  padding: 80px 16px;
+  background-color: #333;
   justify-content: center;
-  max-width: 800px;
 }
+
 .card-list-custom-styles {
   max-width: 1280px;
 }
+
 .pulse-loader-custom-styles {
   text-align: center;
+  position: sticky;
+  position: -webkit-sticky;
+  top: 200px;
+}
+
+.loading-block {
+  min-height: calc(100vh - 190.3px - 160px);
 }
 </style>
