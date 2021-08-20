@@ -118,14 +118,14 @@ export default {
     mapPersonTo: async function (person, key) {
       const objectArray = [];
       if (Array.isArray(person[`${key}`])) {
-      for await (let objectUrl of person[`${key}`]) {
-        const response = await fetch(objectUrl, {
-          mode: "cors",
-        });
-        const object = await response.json();
-        objectArray.push(object);
-      }
-      person[`${key}`] = objectArray;
+        for await (let objectUrl of person[`${key}`]) {
+          const response = await fetch(objectUrl, {
+            mode: "cors",
+          });
+          const object = await response.json();
+          objectArray.push(object);
+        }
+        person[`${key}`] = objectArray;
       } else {
         const response = await fetch(person[`${key}`], { mode: "cors" });
         const object = await response.json();
@@ -149,6 +149,7 @@ export default {
     showModal: async function (personUrl) {
       this.isModalLoading = this.isModalVisible = true;
       this.selectedPersonUrl = personUrl;
+      document.body.style = "overflow:hidden";
 
       const selectedPerson = this.getPerson;
       if (typeof selectedPerson.films[0] === "string") {
@@ -160,6 +161,7 @@ export default {
     closeModal: function () {
       this.isModalVisible = this.isModalLoading = false;
       this.selectedPersonUrl = null;
+      document.body.style = "overflow: auto";
     },
   },
 };
