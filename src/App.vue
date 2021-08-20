@@ -117,6 +117,7 @@ export default {
     },
     mapPersonTo: async function (person, key) {
       const objectArray = [];
+      if (Array.isArray(person[`${key}`])) {
       for await (let objectUrl of person[`${key}`]) {
         const response = await fetch(objectUrl, {
           mode: "cors",
@@ -125,6 +126,11 @@ export default {
         objectArray.push(object);
       }
       person[`${key}`] = objectArray;
+      } else {
+        const response = await fetch(person[`${key}`], { mode: "cors" });
+        const object = await response.json();
+        person[`${key}`] = object;
+      }
     },
     fetchPeople: async function (page = 1) {
       const response = await fetch(
@@ -145,8 +151,10 @@ export default {
       this.selectedPersonUrl = personUrl;
 
       const selectedPerson = this.getPerson;
-      if (typeof selectedPerson.films[0] === "string")
+      if (typeof selectedPerson.films[0] === "string") {
         await this.mapPersonTo(selectedPerson, "films");
+        await this.mapPersonTo(selectedPerson, "homeworld");
+      }
       this.isModalLoading = false;
     },
     closeModal: function () {
