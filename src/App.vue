@@ -7,12 +7,15 @@
       @input="saveSearchValue"
       @click.native="scrollToElement"
     />
-    <div class="loading-block">
+    <div
+      class="loading-block"
+      v-infinite-scroll="loadMoreData"
+      infinite-scroll-disabled="isLoading"
+    >
       <CardList
         class="card-list-custom-styles"
-        :data="people"
+        :data="data.results"
         :showModal="showModal"
-        v-show="!isLoading"
       />
       <PulseLoader
         size="40px"
@@ -51,7 +54,7 @@ export default {
   data() {
     return {
       searchValue: "",
-      people: [],
+      data: {},
       isLoading: true,
       isModalLoading: false,
       isModalVisible: false,
@@ -59,7 +62,7 @@ export default {
     };
   },
   async mounted() {
-    this.people = await this.fetchPeople();
+    this.data = await this.fetchData();
     await this.mapPeopleTo("species");
     this.isLoading = false;
   },
@@ -71,14 +74,13 @@ export default {
       this.isLoading = true;
 
       try {
-        const response = await fetch(
-          `https://swapi.dev/api/people/?search=${this.searchValue}`,
-          {
-            mode: "cors",
-            signal,
-          }
-        );
-        this.people = (await response.json()).results;
+        const searchUrl = `https://swapi.dev/api/people/?search=${this.searchValue}`;
+        const response = await fetch(searchUrl, {
+          mode: "cors",
+          signal,
+        });
+        this.data = await response.json();
+        await this.mapPeopleTo("species");
         this.isLoading = false;
       } catch {
         console.log();
@@ -87,7 +89,7 @@ export default {
   },
   computed: {
     getPerson: function () {
-      let selectedPerson = this.people.find(
+      let selectedPerson = this.data.results.find(
         (person) => person.url == this.selectedPersonUrl
       );
       return selectedPerson;
@@ -104,7 +106,7 @@ export default {
       }
     },
     mapPeopleTo: async function (key) {
-      for await (const person of this.people) {
+      for await (const person of this.data.results) {
         for (let objectUrl of person[`${key}`]) {
           const response = await fetch(objectUrl, {
             mode: "cors",
@@ -132,7 +134,7 @@ export default {
         person[`${key}`] = object;
       }
     },
-    fetchPeople: async function (page = 1) {
+    fetchData: async function (page = 1) {
       const response = await fetch(
         `https://swapi.dev/api/people?page=${page}`,
         {
@@ -140,7 +142,7 @@ export default {
           signal,
         }
       );
-      return (await response.json()).results;
+      return await response.json();
     },
     saveSearchValue: function (value) {
       this.searchValue = value;
@@ -162,6 +164,18 @@ export default {
       this.isModalVisible = this.isModalLoading = false;
       this.selectedPersonUrl = null;
       document.body.style = "overflow: auto";
+    },
+    loadMoreData: async function () {
+      if (this.data.next != null) {
+        this.isLoading = true;
+        const response = await fetch(this.data.next, { mode: "cors" });
+        const nextData = await response.json();
+        const results = this.data.results;
+        const newResults = [...results, ...nextData.results];
+        nextData.results = newResults;
+        this.data = nextData;
+        this.isLoading = false;
+      }
     },
   },
 };
